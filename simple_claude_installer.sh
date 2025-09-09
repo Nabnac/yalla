@@ -23,6 +23,17 @@ else
     error "Unsupported OS. Use Linux or macOS."
 fi
 
+# Handle sudo installation
+if ! command -v sudo >/dev/null 2>&1; then
+    if [[ $EUID -eq 0 ]]; then
+        log "Installing sudo..."
+        apt update && apt install -y sudo
+        error "Sudo installed. Please run this script as a regular user now."
+    else
+        error "No sudo found. Run as root first to install sudo, then as regular user."
+    fi
+fi
+
 # Check if running as root
 if [[ $EUID -eq 0 ]]; then
     error "Don't run as root. Use a regular user with sudo."
