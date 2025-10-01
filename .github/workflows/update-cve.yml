@@ -30,6 +30,7 @@ jobs:
     - name: Run CVE updater
       env:
         NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        INITIAL_RUN: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
       run: |
         python cve-database-updater-github.py
 
